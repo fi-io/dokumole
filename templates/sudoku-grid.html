@@ -1,0 +1,7 @@
+<table class="sudoku-container">
+	<tr data-ng-repeat="n in [] | range:nvalue">
+		<td data-ng-repeat="n in [] | range:nvalue" data-ng-class="gridCellClass($parent.$index, $index)">
+			<input type="text" maxlength="1" data-row="{{$parent.$index}}" data-col="{{$index}}" />
+		</td>
+	</tr>
+</table>
