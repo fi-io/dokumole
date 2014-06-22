@@ -17,7 +17,8 @@ dokumoleApp.directive('sudokuGrid', function() {
 			element.on('keyup', function(evt) {
 				var str = "";
 				var inp_ele = element.find('input');
-				for (var i = 0; i < inp_ele.length; i++) {
+				var ele_len = inp_ele.length;
+				for (var i = 0; i < ele_len; i++) {
 					if (!inp_ele[i].value) {
 						str += '0';
 					} else {
@@ -29,7 +30,8 @@ dokumoleApp.directive('sudokuGrid', function() {
 			});
 			scope.$watch('result', function(newval) {
 				var inp_ele = element.find('input');
-				for (var i = 0; i < inp_ele.length; i++) {
+				var ele_len = inp_ele.length;
+				for (var i = 0; i < ele_len; i++) {
 					if (newval[i] == '0') {
 						inp_ele[i].value = '';
 					} else {
@@ -39,7 +41,8 @@ dokumoleApp.directive('sudokuGrid', function() {
 			});
 			scope.$watch('nvalue', function(val) {
 				var inp_ele = element.find('input');
-				for (var i = 0; i < inp_ele.length; i++) {
+				var ele_len = inp_ele.length;
+				for (var i = 0; i < ele_len; i++) {
 					inp_ele[i].value = '';
 				}
 			});
@@ -79,77 +82,21 @@ function MainController($scope) {
 	}
 	
 	$scope.solveSudoku = function() {
-		$scope.result = solve($scope.gridString);
-	}
-	
-	/* Function to get all row indexes of current element */
-	function getRowIndexes(i) {
-		"use strict";
-		var rowIndex = Math.floor(i / $scope.nvalue);
-		var list = [];
-		for (var i = rowIndex*$scope.nvalue; i < (rowIndex*$scope.nvalue + $scope.nvalue); i++) {
-			list.push(i);
-		}
-		return list;
-	}
-	/* Function to get all col indexes of current element */
-	function getColIndexes(i) {
-		"use strict";
-		var colIndex = i % $scope.nvalue;
-		var list = [];
-		for (var i = colIndex; i < $scope.nsq; i += $scope.nvalue) {
-			list.push(i);
-		}
-		return list;
-	}
-	/* Function to get all col indexes of current element */
-	function getBlockIndexes(i) {
-		"use strict";
-		var block_row = Math.floor(i / $scope.rowCells);
-		var block_col = Math.floor(i % $scope.nvalue / $scope.nsqrt);
-		var f_num = (block_row * $scope.rowCells) + (block_col * $scope.nsqrt);
-		var list = [];
-		for (var i = f_num; i < (f_num + $scope.nsqrt); i++) {
-			for (var j = i, count = 0; count < $scope.nsqrt; count++, j+=$scope.nvalue) {
-				list.push(j);
-			}
-		}
-		return list;
-	}
-	function solve(input) {
-		"use strict";
-		var i = input.indexOf('0');
-		
-		if (i == -1) {
-			// already solved
-			return input;
-		}
-		var excluded = [];
-		var excluded_indexes = getRowIndexes(i).concat(getColIndexes(i)).concat(getBlockIndexes(i));
-		for (var j = 0; j < excluded_indexes.length; j++) {
-			excluded.push(input[excluded_indexes[j]]);
-		}
-		//excluded = set(excluded);
-		for (var m in $scope.possible_vals){
-			if (excluded.indexOf($scope.possible_vals[m]) == -1) {
-				var temp = solve(input.substr(0, i) + $scope.possible_vals[m] + input.substr(i + 1));
-				if(!temp) {
-					excluded.push($scope.possible_vals[m]);
-				} else {
-					return temp;
-				}
-			}
-		}
-	}
-
-	function set (arr) {
-		"use strict";
-		return arr.reduce(function (a, val) {
-			if (a.indexOf(val) === -1) {
-				a.push(val);
-			}
-			return a;
-		}, []);
+		//$scope.result = solve($scope.gridString);
+		var worker = new Worker('javascripts/sudokusolver.js');
+		worker.addEventListener('message', function(e) {
+			console.log('Worker said: ', e.data);
+			$scope.result = e.data;
+			worker.terminate();
+		}, false);
+		worker.postMessage({
+			nvalue:	$scope.nvalue,
+			nsq:	$scope.nsq,
+			nsqrt:	$scope.nsqrt,
+			rowCells:	$scope.rowCells,
+			gridString: $scope.gridString,
+			possible_vals: $scope.possible_vals
+		});
 	}
 	
 };
