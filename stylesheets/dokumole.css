@@ -1,11 +1,12 @@
 .sudoku-container {
-	border: 5px solid #666;
+	/*border: 5px solid #666;*/
 	margin-left: auto;
 	margin-right: auto;
 }
 
 .sudoku-container td {
 	margin: 0;
+	padding: 2px;
 }
 .sudoku-container input {
 	width: 40px;
