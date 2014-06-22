@@ -40,13 +40,16 @@ function MainController($scope) {
 	$scope.nsq = 0;
 	$scope.possible_vals = [];
 	$scope.grid = "";
-	$scope.$cellMatrix = {};
+	$scope.gridString = "";
 	$scope.setNvalue = function(n) {
 		$scope.nvalue = n;
 		$scope.nsqrt = Math.sqrt(n);
 		$scope.nsq = n * n;
 		for (var i = 1; i <= n; i++){
 			$scope.possible_vals.push(i.toString());
+		}
+		for (var i = 0; i < $scope.nsq; i++){
+			$scope.gridString += '0'
 		}
 	}
 	$scope.gridCellClass = function(i, j) {
