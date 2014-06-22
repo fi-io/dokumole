@@ -81,7 +81,7 @@ function MainController($scope) {
 		if (i == -1) {
 			// already solved
 			$scope.result = input;
-			throw "solved";
+			throw "This is not an error. I need to fix this one. Dont worry about it. :)";
 		}
 		var excluded = [];
 		for (var j = 0; j < $scope.nsq; j++) {
