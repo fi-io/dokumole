@@ -28,7 +28,17 @@ dokumoleApp.directive('sudokuGrid', function() {
 			scope.$watch('result', function(newval) {
 				var inp_ele = element.find('input');
 				for (var i = 0; i < inp_ele.length; i++) {
-					inp_ele[i].value = newval[i];
+					if (newval[i] == '0') {
+						inp_ele[i].value = '';
+					} else {
+						inp_ele[i].value = newval[i];
+					}
+				}
+			});
+			scope.$watch('nvalue', function(val) {
+				var inp_ele = element.find('input');
+				for (var i = 0; i < inp_ele.length; i++) {
+					inp_ele[i].value = '';
 				}
 			});
 		}
@@ -41,6 +51,7 @@ function MainController($scope) {
 	$scope.possible_vals = [];
 	$scope.grid = "";
 	$scope.gridString = "";
+	$scope.solvebutton = true;
 	$scope.setNvalue = function(n) {
 		$scope.nvalue = n;
 		$scope.nsqrt = Math.sqrt(n);
@@ -49,8 +60,9 @@ function MainController($scope) {
 			$scope.possible_vals.push(i.toString());
 		}
 		for (var i = 0; i < $scope.nsq; i++){
-			$scope.gridString += '0'
+			$scope.gridString += '0';
 		}
+		$scope.solvebutton = false;
 	}
 	$scope.gridCellClass = function(i, j) {
 		var sectIDi = Math.floor( i / $scope.nsqrt );
