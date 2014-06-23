@@ -1,5 +1,6 @@
 self.addEventListener('message', function(e) {
     var $scope = e.data;
+    //console.log($scope);
     /* Function to get all row indexes of current element */
     function getRowIndexes(i) {
         "use strict";

@@ -29,6 +29,7 @@ dokumoleApp.directive('sudokuGrid', function() {
 				scope.$digest();
 			});
 			scope.$watch('result', function(newval) {
+				console.log("newval : ", newval);
 				var inp_ele = element.find('input');
 				var ele_len = inp_ele.length;
 				for (var i = 0; i < ele_len; i++) {
@@ -63,9 +64,14 @@ function MainController($scope) {
 		$scope.nsqrt = Math.sqrt(n);
 		$scope.nsq = n * n;
 		$scope.rowCells = $scope.nvalue * $scope.nsqrt;
+        // Empty the possible value array
+        while($scope.possible_vals.length > 0) {
+            $scope.possible_vals.pop();
+        }
 		for (var i = 1; i <= n; i++){
 			$scope.possible_vals.push(i.toString());
 		}
+        $scope.gridString = "";
 		for (var i = 0; i < $scope.nsq; i++){
 			$scope.gridString += '0';
 		}
@@ -87,6 +93,7 @@ function MainController($scope) {
 		worker.addEventListener('message', function(e) {
 			console.log('Worker said: ', e.data);
 			$scope.result = e.data;
+			$scope.$digest();
 			worker.terminate();
 		}, false);
 		worker.postMessage({
