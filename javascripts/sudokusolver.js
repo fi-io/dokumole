@@ -1,6 +1,6 @@
 self.addEventListener('message', function(e) {
     var $scope = e.data;
-    //console.log($scope);
+    console.log($scope);
     /* Function to get all row indexes of current element */
     function getRowIndexes(i) {
         "use strict";
@@ -51,10 +51,11 @@ self.addEventListener('message', function(e) {
         for (var j = 0; j < ex_len; j++) {
             excluded.push(input[excluded_indexes[j]]);
         }
-        //excluded = set(excluded);
+        excluded = set(excluded);
         var poss_len = $scope.possible_vals.length;
         for (var m = 0; m < poss_len; m++){
             if (excluded.indexOf($scope.possible_vals[m]) == -1) {
+                console.log($scope.possible_vals[m]);
                 var temp = solve(input.substr(0, i) + $scope.possible_vals[m] + input.substr(i + 1));
                 if(!temp) {
                     excluded.push($scope.possible_vals[m]);

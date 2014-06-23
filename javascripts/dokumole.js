@@ -59,7 +59,8 @@ function MainController($scope) {
 	$scope.grid = "";
 	$scope.gridString = "";
 	$scope.solvebutton = true;
-	$scope.setNvalue = function(n) {
+	
+    $scope.setNvalue = function(n) {
 		$scope.nvalue = n;
 		$scope.nsqrt = Math.sqrt(n);
 		$scope.nsq = n * n;
@@ -76,7 +77,8 @@ function MainController($scope) {
 			$scope.gridString += '0';
 		}
 		$scope.solvebutton = false;
-	}
+	};
+    
 	$scope.gridCellClass = function(i, j) {
 		var sectIDi = Math.floor( i / $scope.nsqrt );
 		var sectIDj = Math.floor( j / $scope.nsqrt );
@@ -85,7 +87,7 @@ function MainController($scope) {
 		} else {
 			return 'sudoku-section-two';
 		}
-	}
+	};
 	
 	$scope.solveSudoku = function() {
 		//$scope.result = solve($scope.gridString);
@@ -104,6 +106,13 @@ function MainController($scope) {
 			gridString: $scope.gridString,
 			possible_vals: $scope.possible_vals
 		});
-	}
+	};
 	
+    $scope.resetGrid = function() {
+        var temp = "";
+        for (var i = 0; i < $scope.nsq; i++){
+			temp += '0';
+		}
+        $scope.result = temp;
+    };
 };
