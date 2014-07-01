@@ -1,5 +1,7 @@
 self.addEventListener('message', function(e) {
+    "use strict";
     var $scope = e.data;
+    var poss_len = $scope.possible_vals.length;
     console.log($scope);
     /* Function to get all row indexes of current element */
     function getRowIndexes(i) {
@@ -7,8 +9,8 @@ self.addEventListener('message', function(e) {
         var rowIndex = Math.floor(i / $scope.nvalue);
         var list = [];
         var final = rowIndex*$scope.nvalue + $scope.nvalue;
-        for (var i = rowIndex*$scope.nvalue; i < final; i++) {
-            list.push(i);
+        for (var k = rowIndex*$scope.nvalue; k < final; k++) {
+            list.push(k);
         }
         return list;
     }
@@ -17,8 +19,8 @@ self.addEventListener('message', function(e) {
         "use strict";
         var colIndex = i % $scope.nvalue;
         var list = [];
-        for (var i = colIndex; i < $scope.nsq; i += $scope.nvalue) {
-            list.push(i);
+        for (var k = colIndex; k < $scope.nsq; k += $scope.nvalue) {
+            list.push(k);
         }
         return list;
     }
@@ -30,8 +32,8 @@ self.addEventListener('message', function(e) {
         var f_num = (block_row * $scope.rowCells) + (block_col * $scope.nsqrt);
         var final = f_num + $scope.nsqrt;
         var list = [];
-        for (var i = f_num; i < final; i++) {
-            for (var j = i, count = 0; count < $scope.nsqrt; count++, j+=$scope.nvalue) {
+        for (var k = f_num; k < final; k++) {
+            for (var j = k, count = 0; count < $scope.nsqrt; count++, j+=$scope.nvalue) {
                 list.push(j);
             }
         }
@@ -40,7 +42,7 @@ self.addEventListener('message', function(e) {
     function solve(input) {
         "use strict";
         var i = input.indexOf('0');
-        
+
         if (i == -1) {
             // already solved
             return input;
@@ -52,11 +54,10 @@ self.addEventListener('message', function(e) {
             excluded.push(input[excluded_indexes[j]]);
         }
         excluded = set(excluded);
-        var poss_len = $scope.possible_vals.length;
         for (var m = 0; m < poss_len; m++){
             if (excluded.indexOf($scope.possible_vals[m]) == -1) {
-                console.log($scope.possible_vals[m]);
-                var temp = solve(input.substr(0, i) + $scope.possible_vals[m] + input.substr(i + 1));
+                input[i] = $scope.possible_vals[m];
+                var temp = solve(input);
                 if(!temp) {
                     excluded.push($scope.possible_vals[m]);
                 } else {
