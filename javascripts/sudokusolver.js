@@ -2,7 +2,7 @@ self.addEventListener('message', function(e) {
     "use strict";
     var $scope = e.data;
     var poss_len = $scope.possible_vals.length;
-    console.log($scope);
+    console.log("Recieved : ", $scope);
     /* Function to get all row indexes of current element */
     function getRowIndexes(i) {
         "use strict";
@@ -24,7 +24,7 @@ self.addEventListener('message', function(e) {
         }
         return list;
     }
-    /* Function to get all col indexes of current element */
+    /* Function to get all block indexes of current element */
     function getBlockIndexes(i) {
         "use strict";
         var block_row = Math.floor(i / $scope.rowCells);
@@ -41,6 +41,7 @@ self.addEventListener('message', function(e) {
     }
     function solve(input) {
         "use strict";
+	    //console.log(input);
         var i = input.indexOf('0');
 
         if (i == -1) {
@@ -76,7 +77,9 @@ self.addEventListener('message', function(e) {
             return a;
         }, []);
     }
-    
-    self.postMessage(solve($scope.gridString));
+
+	var res = solve($scope.gridString);
+	console.log("Result : ", res);
+    self.postMessage(res);
     
 }, false);
